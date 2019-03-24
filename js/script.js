@@ -1,3 +1,5 @@
+const $eventTotal = $('<label>Total:</label>')
+const $totalNumber = $('<label id="total"></label>')
 const $activities = $('.activities input[type="checkbox"]')
 
 //when the page loads, run the following code
@@ -45,28 +47,30 @@ $('#design').change('click', function(){
   }
 })
 
+$('.activities').append($eventTotal)
+$('.activities').append($totalNumber)
 //disable activity checkboxes that have conflicting time slots
 $activities.on('click', function(e) {
 
-  if(e.target.name === "js-frameworks" && $(this).prop('checked')) {
+  if($('[name="js-frameworks"]').prop('checked')) {
     $('[name="express"]').prop('disabled', true)
   } else {
     $('[name="express"]').prop('disabled', false)
   }
 
-  if(e.target.name === "js-libs" && $(this).prop('checked')) {
+  if($('[name="js-libs"]').prop('checked')) {
     $('[name="node"]').prop('disabled', true)
   } else {
     $('[name="node"]').prop('disabled', false)
   }
 
-  if(e.target.name === "express" && $(this).prop('checked')) {
+  if($('[name="express"]').prop('checked')) {
     $('[name="js-frameworks"]').prop('disabled', true)
   } else {
     $('[name="js-frameworks"]').prop('disabled', false)
   }
 
-  if(e.target.name === "node" && $(this).prop('checked')) {
+  if($('[name="node"]').prop('checked')) {
     $('[name="js-libs"]').prop('disabled', true)
   } else {
     $('[name="js-libs"]').prop('disabled', false)
