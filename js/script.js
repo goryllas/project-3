@@ -1,3 +1,5 @@
+const $activities = $('.activities input[type="checkbox"]')
+
 //when the page loads, run the following code
 $(document).ready(function(){
 //focus on the first text field
@@ -44,4 +46,77 @@ $('#design').change('click', function(){
 })
 
 //disable activity checkboxes that have conflicting time slots
-const mainConference = $('.activities input').eq(0).val('all')
+$activities.on('click', function(e) {
+
+  if(e.target.name === "js-frameworks" && $(this).prop('checked')) {
+    $('[name="express"]').prop('disabled', true)
+  } else {
+    $('[name="express"]').prop('disabled', false)
+  }
+
+  if(e.target.name === "js-libs" && $(this).prop('checked')) {
+    $('[name="node"]').prop('disabled', true)
+  } else {
+    $('[name="node"]').prop('disabled', false)
+  }
+
+  if(e.target.name === "express" && $(this).prop('checked')) {
+    $('[name="js-frameworks"]').prop('disabled', true)
+  } else {
+    $('[name="js-frameworks"]').prop('disabled', false)
+  }
+
+  if(e.target.name === "node" && $(this).prop('checked')) {
+    $('[name="js-libs"]').prop('disabled', true)
+  } else {
+    $('[name="js-libs"]').prop('disabled', false)
+  }
+
+
+
+})
+
+// if(e.target.name === "js-frameworks" && $(this).prop('checked')) {
+//   $('[name="express"]').prop('disabled', true)
+// } else {
+//   $('[name="express"]').prop('disabled', false)
+// }
+//
+// if(e.target.name === "js-libs" && $(this).prop('checked')) {
+//   $('[name="node"]').prop('disabled', true)
+// } else {
+//   $('[name="node"]').prop('disabled', false)
+// }
+//
+// if(e.target.name === "express" && $(this).prop('checked')) {
+//   $('[name="js-frameworks"]').prop('disabled', true)
+// } else {
+//   $('[name="js-frameworks"]').prop('disabled', false)
+// }
+//
+// if(e.target.name === "node" && $(this).prop('checked')) {
+//   $('[name="js-libs"]').prop('disabled', true)
+// } else {
+//   $('[name="js-libs"]').prop('disabled', false)
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//extra working space ^
