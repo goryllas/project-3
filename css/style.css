@@ -143,9 +143,11 @@ button:hover {
 }
 
 .error {
+  color: #c51244;
+  padding: 10px;
+  position: relative;
   display: none;
-  color: red;
-  padding: 0 0 25px 0;
+  margin: 5px 0 0;
   text-align: center;
 }
 

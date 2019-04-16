@@ -166,11 +166,11 @@ $(document).ready(function() {
 
   // form validation messages to be used
   const invalidAlerts = {
-    emptyField: $('<span id="empty"class="error">* Required Field *</span>'),
-    name: $('<span id="nameError" class="error">* Please enter a valid name *</span>'),
-    mail: $('<span id="mailError" class="error">* Please enter a valid email *</span>'),
-    activity: $('<span id="activError" class="error">* Check at least ONE activity *</span>'),
-    ccNum: $('<span id="ccNumError" class="error">Invalid Credit Card Number</span>'),
+    emptyField: $('<span id="empty"class="error">Required Field</span>'),
+    name: $('<span id="nameError" class="error">Please enter a valid name</span>'),
+    mail: $('<span id="mailError" class="error">Please enter a valid email</span>'),
+    activity: $('<span id="activError" class="error">Check at least ONE activity</span>'),
+    ccNum: $('<span id="ccNumError" class="error">Please enter between 13 and 16 digits</span>'),
     zip: $('<span id="zipError" class="error">Invalid ZipCode</span>'),
     cvv: $('<span id="cvvError" class="error">Invalid CVV</span>')
   }
@@ -206,7 +206,7 @@ $(document).ready(function() {
   $('#name').on('input', function() {
     let input = $(this)
     let inputName = input.val()
-    let nameValidation = /^[a-zA-Z]+$/.test(inputName)
+    let nameValidation = /^[a-zA-Z ,.'-]+$/.test(inputName)
     if (nameValidation) {
       input.removeClass('invalid').addClass('valid')
       $('#nameError').css('display', 'none')
@@ -233,11 +233,7 @@ $(document).ready(function() {
 
 
   // make sure at least one checkbox is checked
-
-  /*
-   Citation: Javed Ur Rehman, 7/29/2016, allphptricks.com. The following
-   snippet has been re-formatted for use on this form. I finally broke. :(
-  */
+  // Citation: Javed Ur Rehman, 7/29/2016, allphptricks.com.
 
   /********** Begin cited snippet **********/
   $('form').submit(function() {
@@ -253,12 +249,51 @@ $(document).ready(function() {
 
 
   // check that credit card number is formatted properly
+  $('#cc-num').on('input', function() {
+    let input = $(this)
+    let inputCcnum = input.val()
+    // Citation: ccNum regex from regex101.com library, user: ehsan
+    let ccnumValidation = /^\d{13,16}$/.test(inputCcnum);
+
+    if (ccnumValidation) {
+      input.removeClass('invalid').addClass('valid')
+      $('#ccNumError').css('display', 'none')
+    } else {
+      input.removeClass('valid').addClass('invalid')
+      $('#ccNumError').css('display', 'inherit')
+    }
+  })
 
 
+  // check that the ZipCode is formatted properly
+  $('#zip').on('input', function() {
+    let input = $(this)
+    let inputZip = input.val()
+    // Citation: ccNum regex from regex101.com library, user: ehsan
+    let zipValidation = /^\d{5}$/.test(inputZip);
+    if (zipValidation) {
+      input.removeClass('invalid').addClass('valid')
+      $('#zipError').css('display', 'none')
+    } else {
+      input.removeClass('valid').addClass('invalid')
+      $('#zipError').css('display', 'inherit')
+    }
+  })
 
 
+  // check that the CVV number is formatted properly
+  $('#cvv').on('input', function() {
+    let input = $(this)
+    let inputCvv = input.val()
+    // Citation: ccNum regex from regex101.com library, user: ehsan
+    let cvvValidation = /^\d{3}$/.test(inputCvv);
+    if (cvvValidation) {
+      input.removeClass('invalid').addClass('valid')
+      $('#cvvError').css('display', 'none')
+    } else {
+      input.removeClass('valid').addClass('invalid')
+      $('#cvvError').css('display', 'inherit')
+    }
+  })
 
-
-
-  //extra working space ^
 })
