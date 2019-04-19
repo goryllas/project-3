@@ -6,8 +6,6 @@ Project 3: Interractive Form
 //when the page loads, run the following code
 $(document).ready(function() {
 
-  const $submit = $('button[type="submit"]')
-
   //focus on the first text field
   $('#name').focus()
 
@@ -21,7 +19,6 @@ $(document).ready(function() {
   selected or hide it if a different selection is made
   */
   $('#other-title').hide()
-
   $('#title').change('click', function() {
     const otherOption = $(this).val()
     if (otherOption === 'other') {
@@ -211,9 +208,6 @@ $(document).ready(function() {
   })
 
   // make sure at least one checkbox is checked
-  // Citation: Javed Ur Rehman, 7/29/2016, allphptricks.com.
-
-  /********** Begin cited snippet **********/
   $('.activities').on('change', function() {
     if ($('input:checkbox').filter(':checked').length < 1) {
       $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
@@ -222,14 +216,11 @@ $(document).ready(function() {
     }
   })
 
-  /********** End cited code **********/
-
   // check that credit card number is formatted properly
   $('#cc-num').on('input', function() {
     let input = $(this)
     let inputCcnum = input.val()
-    // Citation: ccNum regex from regex101.com library, user: ehsan
-    let ccnumValidation = /^\d{13,16}$/.test(inputCcnum);
+    let ccnumValidation = /^\d{13,16}$/.test(inputCcnum)
     if (!ccnumValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="cc-num"]').text(invalidAlerts.ccNum).css('color', 'red')
@@ -268,4 +259,16 @@ $(document).ready(function() {
       $('label[for="cvv"]').text('CVV:').css('color', '#184f68')
     }
   })
+
+  // when form is submitted check for invalid classes
+  $('form').on('submit', function(e) {
+    let classValue = $('form').find('input').hasClass('invalid')
+    if (classValue) {
+      console.log('Form Will NOT Be Submitted')
+      event.preventDefault()
+    } else {
+      console.log('Form Will Be Submitted')
+    }
+  })
+
 })
