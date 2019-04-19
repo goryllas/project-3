@@ -142,15 +142,6 @@ button:hover {
 	background: #184c62;
 }
 
-.error {
-  color: #c51244;
-  padding: 10px;
-  position: relative;
-  display: none;
-  margin: 5px 0 0;
-  text-align: center;
-}
-
 input.invalid, textarea.invalid {
   border: 2px solid red;
 }
@@ -181,6 +172,7 @@ input.valid, textarea.valid {
 .credit-card {
 	margin-top: 1.25em;
 }
+
 
 /* =================================
   Helper Classes

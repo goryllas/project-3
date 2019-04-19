@@ -1,22 +1,15 @@
 /****************************************
 Project 3: Interractive Form
 ****************************************/
+
+
 //when the page loads, run the following code
 $(document).ready(function() {
-  //create running total element to be used on activities section
-  const $total = $('<span id="total">Total: $0</span>')
-  const $activities = $('.activities input[type="checkbox"]')
-  $('.activities').append($total)
 
+  const $submit = $('button[type="submit"]')
 
   //focus on the first text field
   $('#name').focus()
-  //hide the "Your Job Role" text field
-  $('#other-title').hide()
-  /* Hide the "Color" label and select menu until a T-Shirt design
-   is selected from the "Design" menu.*/
-  $('#colors-js-puns').first().hide()
-
 
 
   /****************************************
@@ -24,9 +17,11 @@ $(document).ready(function() {
   ****************************************/
 
   /*
-  reveal a text field when the 'Other' option is selected
-  or hide it if a different selection is made
+  Hide the "Your Job Role" text field. Reveal it if the 'Other' option is
+  selected or hide it if a different selection is made
   */
+  $('#other-title').hide()
+
   $('#title').change('click', function() {
     const otherOption = $(this).val()
     if (otherOption === 'other') {
@@ -40,6 +35,12 @@ $(document).ready(function() {
   /****************************************
   "T-Shirt Info" Section
   ****************************************/
+
+  /*
+  Hide the "Color" label and select menu until a T-Shirt design
+  is selected from the "Design" menu
+  */
+  $('#colors-js-puns').first().hide()
 
   /*
   Only display the "Color" options that match the T-shirt design selected.
@@ -69,6 +70,10 @@ $(document).ready(function() {
   "Register For Activities" Section
   ****************************************/
 
+  //create running total element to be used
+  const $total = $('<span id="total">Total: $0</span>')
+  const $activities = $('.activities input[type="checkbox"]')
+  $('.activities').append($total)
 
   //added price value attribute to each activity
   $('[name="all"]').val(200)
@@ -119,6 +124,7 @@ $(document).ready(function() {
   /****************************************
   "Payment Info" Section
   ****************************************/
+
   const $creditCardDiv = $('#credit-card')
   const $paypalDiv = $('p:contains("PayPal")')
   const $bitcoinDiv = $('p:contains("Bitcoin")')
@@ -161,92 +167,62 @@ $(document).ready(function() {
   /****************************************
   "Form Validation" Section
   ****************************************/
-  //declared variables to be used. not sure i need them here
-  const $submit = $('button[type="submit"]')
 
   // form validation messages to be used
   const invalidAlerts = {
-    emptyField: $('<span id="empty"class="error">Required Field</span>'),
-    name: $('<span id="nameError" class="error">Please enter a valid name</span>'),
-    mail: $('<span id="mailError" class="error">Please enter a valid email</span>'),
-    activity: $('<span id="activError" class="error">Check at least ONE activity</span>'),
-    ccNum: $('<span id="ccNumError" class="error">Please enter between 13 and 16 digits</span>'),
-    zip: $('<span id="zipError" class="error">Invalid ZipCode</span>'),
-    cvv: $('<span id="cvvError" class="error">Invalid CVV</span>')
+    emptyField: 'Required Field',
+    name: 'Please Enter A Valid Name',
+    mail: 'Please Enter A Valid Email',
+    activity: 'Check At Least ONE Activity',
+    ccNum: 'Please Enter Between 13 And 16 Digits',
+    zip: 'Invalid ZipCode',
+    cvv: 'Invalid CVV'
   }
 
-  // append validation messages for required fields
-  $('#name').before(invalidAlerts.emptyField)
-  $('#name').before(invalidAlerts.name)
-  $('#mail').before(invalidAlerts.mail)
-  $('.activities').after(invalidAlerts.activity)
-  $('#cc-num').after(invalidAlerts.ccNum)
-  $('#zip').after(invalidAlerts.zip)
-  $('#cvv').after(invalidAlerts.cvv)
-
-
-  /**********************************
-  Validations
-  **********************************/
-
-  //Check that the name field is valid and not empty
-  $('#name').on('input', function() {
-    let input = $(this)
-    let inputName = input.val()
-    if (inputName) {
-      input.removeClass('invalid').addClass('valid')
-      $('#empty').css('display', 'none')
-    } else {
-      input.removeClass('valid').addClass('invalid')
-      $('#empty').css('display', 'inherit')
-    }
-  })
-
-  // check that the name is in a valid format
+  // check that the name field is valid and not empty
   $('#name').on('input', function() {
     let input = $(this)
     let inputName = input.val()
     let nameValidation = /^[a-zA-Z ,.'-]+$/.test(inputName)
-    if (nameValidation) {
-      input.removeClass('invalid').addClass('valid')
-      $('#nameError').css('display', 'none')
-    } else {
+    if (inputName.length < 1) {
       input.removeClass('valid').addClass('invalid')
-      $('#nameError').css('display', 'inherit')
+      $('label[for="name"]').text(invalidAlerts.emptyField).css('color', 'red')
+    } else if (!nameValidation) {
+      input.removeClass('valid').addClass('invalid')
+      $('label[for="name"]').text(invalidAlerts.name).css('color', 'red')
+    } else {
+      input.removeClass('invalid').addClass('valid')
+      $('label[for="name"]').text('Name:').css('color', 'black')
     }
   })
-
 
   // check that the email is in correct format
   $('#mail').on('input', function() {
     let input = $(this)
     let inputMail = input.val()
-    let mailValidation = /^[^@]+@[^@.]+\.[a-z]+$/i.test(inputMail)
-    if (mailValidation) {
-      input.removeClass('invalid').addClass('valid')
-      $('#mailError').css('display', 'none')
-    } else {
+    let mailValidation = /^[^@]+@[^@.]+\.[a-z]{3}$/i.test(inputMail)
+    if (!mailValidation) {
       input.removeClass('valid').addClass('invalid')
-      $('#mailError').css('display', 'inherit')
+      $('label[for="mail"]').text(invalidAlerts.mail).css('color', 'red')
+    } else {
+      input.removeClass('invalid').addClass('valid')
+      $('label[for="mail"]').text('Email:').css('color', 'black')
     }
   })
-
 
   // make sure at least one checkbox is checked
   // Citation: Javed Ur Rehman, 7/29/2016, allphptricks.com.
 
   /********** Begin cited snippet **********/
-  $('form').submit(function() {
-    event.preventDefault()
+  $('.activities').on('change', function() {
     if ($('input:checkbox').filter(':checked').length < 1) {
-      $('#activError').css('display', 'inherit')
-      $('.activities').focus()
+      $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
     } else {
-      $('#activError').css('display', 'none')
+      $('.activities legend').text('Register for Activities').css('color', '#184f68')
     }
   })
-  /********** End cited code **********/
 
+  /********** End cited code **********/
 
   // check that credit card number is formatted properly
   $('#cc-num').on('input', function() {
@@ -254,16 +230,14 @@ $(document).ready(function() {
     let inputCcnum = input.val()
     // Citation: ccNum regex from regex101.com library, user: ehsan
     let ccnumValidation = /^\d{13,16}$/.test(inputCcnum);
-
-    if (ccnumValidation) {
-      input.removeClass('invalid').addClass('valid')
-      $('#ccNumError').css('display', 'none')
-    } else {
+    if (!ccnumValidation) {
       input.removeClass('valid').addClass('invalid')
-      $('#ccNumError').css('display', 'inherit')
+      $('label[for="cc-num"]').text(invalidAlerts.ccNum).css('color', 'red')
+    } else {
+      input.removeClass('invalid').addClass('valid')
+      $('label[for="cc-num"]').text('Card Number:').css('color', '#184f68')
     }
   })
-
 
   // check that the ZipCode is formatted properly
   $('#zip').on('input', function() {
@@ -271,15 +245,14 @@ $(document).ready(function() {
     let inputZip = input.val()
     // Citation: ccNum regex from regex101.com library, user: ehsan
     let zipValidation = /^\d{5}$/.test(inputZip);
-    if (zipValidation) {
-      input.removeClass('invalid').addClass('valid')
-      $('#zipError').css('display', 'none')
-    } else {
+    if (!zipValidation) {
       input.removeClass('valid').addClass('invalid')
-      $('#zipError').css('display', 'inherit')
+      $('label[for="zip"]').text(invalidAlerts.zip).css('color', 'red')
+    } else {
+      input.removeClass('invalid').addClass('valid')
+      $('label[for="zip"]').text('Zip Code:').css('color', '#184f68')
     }
   })
-
 
   // check that the CVV number is formatted properly
   $('#cvv').on('input', function() {
@@ -287,13 +260,12 @@ $(document).ready(function() {
     let inputCvv = input.val()
     // Citation: ccNum regex from regex101.com library, user: ehsan
     let cvvValidation = /^\d{3}$/.test(inputCvv);
-    if (cvvValidation) {
-      input.removeClass('invalid').addClass('valid')
-      $('#cvvError').css('display', 'none')
-    } else {
+    if (!cvvValidation) {
       input.removeClass('valid').addClass('invalid')
-      $('#cvvError').css('display', 'inherit')
+      $('label[for="cvv"]').text(invalidAlerts.cvv).css('color', 'red')
+    } else {
+      input.removeClass('invalid').addClass('valid')
+      $('label[for="cvv"]').text('CVV:').css('color', '#184f68')
     }
   })
-
 })
