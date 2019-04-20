@@ -281,3 +281,6 @@ $(document).ready(function() {
     })
   })
 })
+
+//Big Kudos to my fellow classmates in the Treehouse Slack channels.
+//Credit to Aaron Sawyer the idea of showing the error messages thru the labels.
