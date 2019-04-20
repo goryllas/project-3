@@ -6,7 +6,7 @@ Project 3: Interractive Form
 //when the page loads, run the following code
 $(document).ready(function() {
 
-  //focus on the first text field
+  //focus on the first text field on load
   $('#name').focus()
 
 
@@ -22,9 +22,9 @@ $(document).ready(function() {
   $('#title').change('click', function() {
     const otherOption = $(this).val()
     if (otherOption === 'other') {
-      $('#other-title').show()
+      $('#other-title').show().prop('disabled', false)
     } else {
-      $('#other-title').hide()
+      $('#other-title').hide().prop('disabled', true)
     }
   })
 
@@ -260,15 +260,24 @@ $(document).ready(function() {
     }
   })
 
-  // when form is submitted check for invalid classes
+  // before form is submitted check required fields are valid
   $('form').on('submit', function(e) {
     let classValue = $('form').find('input').hasClass('invalid')
-    if (classValue) {
-      console.log('Form Will NOT Be Submitted')
-      event.preventDefault()
-    } else {
-      console.log('Form Will Be Submitted')
-    }
+    $(':input:not(#other-title, button)').each(function() {
+      let $input = $(this)
+      if (!$input.val()) {
+        $input.addClass('invalid').focus()
+        console.log('No Submit')
+        event.preventDefault()
+      } else if ($('input:checkbox').filter(':checked').length < 1) {
+        $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
+        $input.addClass('invalid')
+        $('.activities').focus()
+        event.preventDefault()
+      } else {
+        alert('Form has been submitted!')
+        return false
+      }
+    })
   })
-
 })
