@@ -6,6 +6,8 @@ Project 3: Interractive Form
 //when the page loads, run the following code
 $(document).ready(function() {
 
+  let validated = false
+
   //focus on the first text field on load
   $('#name').focus()
 
@@ -132,8 +134,8 @@ $(document).ready(function() {
   $('fieldset:contains("Payment Info")').append($errorMessage)
   $($errorMessage).hide()
 
-  //focus on credit card option by default and hide the div for PayPal and Bitcoin
-  $('#payment option[val="credit card"]').attr('selected', true)
+  //select credit card option by default and hide the div for PayPal and Bitcoin
+  $('#payment option[value*="credit card"]').attr('selected', true)
   $paypalDiv.hide()
   $bitcoinDiv.hide()
 
@@ -144,19 +146,23 @@ $(document).ready(function() {
       $creditCardDiv.show()
       $paypalDiv.hide()
       $bitcoinDiv.hide()
+      validated = true
     } else if ($payOption === 'paypal') {
       $creditCardDiv.hide()
       $paypalDiv.show()
       $bitcoinDiv.hide()
+      validated = true
     } else if ($payOption === 'bitcoin') {
       $creditCardDiv.hide()
       $paypalDiv.hide()
       $bitcoinDiv.show()
+      validated = true
     } else {
       $errorMessage.show()
       $creditCardDiv.hide()
       $paypalDiv.hide()
       $bitcoinDiv.hide()
+      validated = false
     }
   })
 
@@ -180,16 +186,19 @@ $(document).ready(function() {
   $('#name').on('input', function() {
     let input = $(this)
     let inputName = input.val()
-    let nameValidation = /^[a-zA-Z ,.'-]+$/.test(inputName)
+    let nameValidation = /^[a-zA-Z ,.'-]+$/.test($('#name').val())
     if (inputName.length < 1) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="name"]').text(invalidAlerts.emptyField).css('color', 'red')
+      validated = false
     } else if (!nameValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="name"]').text(invalidAlerts.name).css('color', 'red')
+      validated = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="name"]').text('Name:').css('color', 'black')
+      validated = true
     }
   })
 
@@ -201,9 +210,11 @@ $(document).ready(function() {
     if (!mailValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="mail"]').text(invalidAlerts.mail).css('color', 'red')
+      validated = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="mail"]').text('Email:').css('color', 'black')
+      validated = true
     }
   })
 
@@ -211,8 +222,10 @@ $(document).ready(function() {
   $('.activities').on('change', function() {
     if ($('input:checkbox').filter(':checked').length < 1) {
       $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
+      validated = false
     } else {
       $('.activities legend').text('Register for Activities').css('color', '#184f68')
+      validated = true
     }
   })
 
@@ -224,9 +237,11 @@ $(document).ready(function() {
     if (!ccnumValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="cc-num"]').text(invalidAlerts.ccNum).css('color', 'red')
+      validated = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="cc-num"]').text('Card Number:').css('color', '#184f68')
+      validated = true
     }
   })
 
@@ -239,9 +254,11 @@ $(document).ready(function() {
     if (!zipValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="zip"]').text(invalidAlerts.zip).css('color', 'red')
+      validated = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="zip"]').text('Zip Code:').css('color', '#184f68')
+      validated = true
     }
   })
 
@@ -254,32 +271,39 @@ $(document).ready(function() {
     if (!cvvValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="cvv"]').text(invalidAlerts.cvv).css('color', 'red')
+      validated = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="cvv"]').text('CVV:').css('color', '#184f68')
+      validated = true
     }
   })
 
   // before form is submitted check required fields are valid
-  $('form').on('submit', function(e) {
-    let classValue = $('form').find('input').hasClass('invalid')
-    $(':input:not(#other-title, button)').each(function() {
+  $('form').submit(function(e) {
+    // let classValue = $('form').filter('input').hasClass('invalid')
+    $(':input:not(#other-title, #title, #payment, button)').each(function() {
       let $input = $(this)
-      if (!$input.val()) {
-        $input.addClass('invalid').focus()
-        console.log('No Submit')
-        event.preventDefault()
+      if ($input.val() == '') {
+        $input.addClass('invalid')
+        validated = false
       } else if ($('input:checkbox').filter(':checked').length < 1) {
         $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
-        $input.addClass('invalid')
-        $('.activities').focus()
-        event.preventDefault()
+        $('.activities').addClass('invalid')
+        validated = false
       } else {
-        alert('Form has been submitted!')
-        return false
+        validated = true
       }
     })
+
+    if (validated === false) {
+      console.log('Not Submitted')
+      event.preventDefault()
+    } else {
+      alert('Form has been submitted!')
+    }
   })
+
 })
 
 //Big Kudos to my fellow classmates in the Treehouse Slack channels.
