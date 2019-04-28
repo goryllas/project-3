@@ -6,7 +6,15 @@ Project 3: Interractive Form
 //when the page loads, run the following code
 $(document).ready(function() {
 
-  let validated = false
+
+  // booleans for validations on submit
+  let nameValid = false
+  let mailValid = false
+  let activitiesValid = false
+  let ccnumValid = false
+  let zipValid = false
+  let cvvValid = false
+  let paymentValid = true
 
   //focus on the first text field on load
   $('#name').focus()
@@ -146,23 +154,26 @@ $(document).ready(function() {
       $creditCardDiv.show()
       $paypalDiv.hide()
       $bitcoinDiv.hide()
-      validated = true
+      $errorMessage.hide()
+      paymentValid = true
     } else if ($payOption === 'paypal') {
       $creditCardDiv.hide()
       $paypalDiv.show()
       $bitcoinDiv.hide()
-      validated = true
+      $errorMessage.hide()
+      paymentValid = true
     } else if ($payOption === 'bitcoin') {
       $creditCardDiv.hide()
       $paypalDiv.hide()
       $bitcoinDiv.show()
-      validated = true
+      $errorMessage.hide()
+      paymentValid = true
     } else {
       $errorMessage.show()
       $creditCardDiv.hide()
       $paypalDiv.hide()
       $bitcoinDiv.hide()
-      validated = false
+      paymentValid = false
     }
   })
 
@@ -190,15 +201,15 @@ $(document).ready(function() {
     if (inputName.length < 1) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="name"]').text(invalidAlerts.emptyField).css('color', 'red')
-      validated = false
+      nameValid = false
     } else if (!nameValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="name"]').text(invalidAlerts.name).css('color', 'red')
-      validated = false
+      nameValid = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="name"]').text('Name:').css('color', 'black')
-      validated = true
+      nameValid = true
     }
   })
 
@@ -210,11 +221,11 @@ $(document).ready(function() {
     if (!mailValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="mail"]').text(invalidAlerts.mail).css('color', 'red')
-      validated = false
+      mailValid = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="mail"]').text('Email:').css('color', 'black')
-      validated = true
+      mailValid = true
     }
   })
 
@@ -222,10 +233,10 @@ $(document).ready(function() {
   $('.activities').on('change', function() {
     if ($('input:checkbox').filter(':checked').length < 1) {
       $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
-      validated = false
+      activitiesValid = false
     } else {
       $('.activities legend').text('Register for Activities').css('color', '#184f68')
-      validated = true
+      activitiesValid = true
     }
   })
 
@@ -237,11 +248,11 @@ $(document).ready(function() {
     if (!ccnumValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="cc-num"]').text(invalidAlerts.ccNum).css('color', 'red')
-      validated = false
+      ccnumValid = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="cc-num"]').text('Card Number:').css('color', '#184f68')
-      validated = true
+      ccnumValid = true
     }
   })
 
@@ -254,11 +265,11 @@ $(document).ready(function() {
     if (!zipValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="zip"]').text(invalidAlerts.zip).css('color', 'red')
-      validated = false
+      zipValid = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="zip"]').text('Zip Code:').css('color', '#184f68')
-      validated = true
+      zipValid = true
     }
   })
 
@@ -271,40 +282,56 @@ $(document).ready(function() {
     if (!cvvValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="cvv"]').text(invalidAlerts.cvv).css('color', 'red')
-      validated = false
+      cvvValid = false
     } else {
       input.removeClass('invalid').addClass('valid')
       $('label[for="cvv"]').text('CVV:').css('color', '#184f68')
-      validated = true
+      cvvValid = true
     }
   })
 
   // before form is submitted check required fields are valid
   $('form').submit(function(e) {
-    // let classValue = $('form').filter('input').hasClass('invalid')
     $(':input:not(#other-title, #title, #payment, button)').each(function() {
       let $input = $(this)
       if ($input.val() == '') {
         $input.addClass('invalid')
-        validated = false
-      } else if ($('input:checkbox').filter(':checked').length < 1) {
-        $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
-        $('.activities').addClass('invalid')
-        validated = false
+        event.preventDefault()
       } else {
-        validated = true
+        return false
       }
     })
 
-    if (validated === false) {
+    if ($('input:checkbox').filter(':checked').length < 1) {
+      $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
+      activitiesValid = false
+    } else if (!nameValid) {
       console.log('Not Submitted')
+      $('#name').addClass('invalid')
+      event.preventDefault()
+    } else if (!mailValid) {
+      $('#mail').addClass('invalid')
+      event.preventDefault()
+    } else if (!activitiesValid) {
+      event.preventDefault()
+    } else if (!ccnumValid) {
+      $('#cc-num').addClass('invalid')
+      event.preventDefault()
+    } else if (!zipValid) {
+      $('#zip').addClass('invalid')
+      event.preventDefault()
+    } else if (!cvvValid) {
+      $('#cvv').addClass('invalid')
+      event.preventDefault()
+    } else if (!paymentValid) {
       event.preventDefault()
     } else {
       alert('Form has been submitted!')
+      return false
     }
   })
-
 })
+
 
 //Big Kudos to my fellow classmates in the Treehouse Slack channels.
 //Credit to Aaron Sawyer the idea of showing the error messages thru the labels.
