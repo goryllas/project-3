@@ -306,7 +306,6 @@ $(document).ready(function() {
       $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
       activitiesValid = false
     } else if (!nameValid) {
-      console.log('Not Submitted')
       $('#name').addClass('invalid')
       event.preventDefault()
     } else if (!mailValid) {
@@ -326,7 +325,6 @@ $(document).ready(function() {
     } else if (!paymentValid) {
       event.preventDefault()
     } else {
-      alert('Form has been submitted!')
       return false
     }
   })
