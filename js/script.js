@@ -297,36 +297,32 @@ $(document).ready(function() {
       if ($input.val() == '') {
         $input.addClass('invalid')
         event.preventDefault()
+      } else if ($('input:checkbox').filter(':checked').length < 1) {
+        $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
+        activitiesValid = false
+      } else if (!nameValid) {
+        $('#name').addClass('invalid')
+        event.preventDefault()
+      } else if (!mailValid) {
+        $('#mail').addClass('invalid')
+        event.preventDefault()
+      } else if (!activitiesValid) {
+        event.preventDefault()
+      } else if (!ccnumValid) {
+        $('#cc-num').addClass('invalid')
+        event.preventDefault()
+      } else if (!zipValid) {
+        $('#zip').addClass('invalid')
+        event.preventDefault()
+      } else if (!cvvValid) {
+        $('#cvv').addClass('invalid')
+        event.preventDefault()
+      } else if (!paymentValid) {
+        event.preventDefault()
       } else {
         return false
       }
     })
-
-    if ($('input:checkbox').filter(':checked').length < 1) {
-      $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
-      activitiesValid = false
-    } else if (!nameValid) {
-      $('#name').addClass('invalid')
-      event.preventDefault()
-    } else if (!mailValid) {
-      $('#mail').addClass('invalid')
-      event.preventDefault()
-    } else if (!activitiesValid) {
-      event.preventDefault()
-    } else if (!ccnumValid) {
-      $('#cc-num').addClass('invalid')
-      event.preventDefault()
-    } else if (!zipValid) {
-      $('#zip').addClass('invalid')
-      event.preventDefault()
-    } else if (!cvvValid) {
-      $('#cvv').addClass('invalid')
-      event.preventDefault()
-    } else if (!paymentValid) {
-      event.preventDefault()
-    } else {
-      return false
-    }
   })
 })
 
