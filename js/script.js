@@ -2,7 +2,6 @@
 Project 3: Interractive Form
 ****************************************/
 
-
 //when the page loads, run the following code
 $(document).ready(function() {
 
@@ -149,25 +148,42 @@ $(document).ready(function() {
 
   $('#payment').change(function() {
     const $payOption = $(this).val()
-
     if ($payOption === 'credit card') {
-      $creditCardDiv.show()
+      $('#payment').after($creditCardDiv)
       $paypalDiv.hide()
       $bitcoinDiv.hide()
       $errorMessage.hide()
       paymentValid = true
     } else if ($payOption === 'paypal') {
-      $creditCardDiv.hide()
       $paypalDiv.show()
       $bitcoinDiv.hide()
       $errorMessage.hide()
       paymentValid = true
+      ccnumValid = true
+      zipValid = true
+      cvvValid = true
+      $('#cc-num').removeClass().val('')
+      $('label[for="cc-num"]').text('Card Number:').css('color', '#184f68')
+      $('#zip').removeClass().val('')
+      $('label[for="zip"]').text('Zip Code:').css('color', '#184f68')
+      $('#cvv').removeClass().val('')
+      $('label[for="cvv"]').text('CVV:').css('color', '#184f68')
+      $('#credit-card').detach()
     } else if ($payOption === 'bitcoin') {
-      $creditCardDiv.hide()
       $paypalDiv.hide()
       $bitcoinDiv.show()
       $errorMessage.hide()
       paymentValid = true
+      ccnumValid = true
+      zipValid = true
+      cvvValid = true
+      $('#cc-num').removeClass().val('')
+      $('label[for="cc-num"]').text('Card Number:').css('color', '#184f68')
+      $('#zip').removeClass().val('')
+      $('label[for="zip"]').text('Zip Code:').css('color', '#184f68')
+      $('#cvv').removeClass().val('')
+      $('label[for="cvv"]').text('CVV:').css('color', '#184f68')
+      $('#credit-card').detach()
     } else {
       $errorMessage.show()
       $creditCardDiv.hide()
@@ -292,6 +308,8 @@ $(document).ready(function() {
 
   // before form is submitted check required fields are valid
   $('form').submit(function(e) {
+
+
     $(':input:not(#other-title, #title, #payment, button)').each(function() {
       let $input = $(this)
       if ($input.val() == '') {
@@ -308,16 +326,18 @@ $(document).ready(function() {
         event.preventDefault()
       } else if (!activitiesValid) {
         event.preventDefault()
-      } else if (!ccnumValid) {
-        $('#cc-num').addClass('invalid')
-        event.preventDefault()
-      } else if (!zipValid) {
-        $('#zip').addClass('invalid')
-        event.preventDefault()
-      } else if (!cvvValid) {
-        $('#cvv').addClass('invalid')
-        event.preventDefault()
-      } else if (!paymentValid) {
+      }
+      // else if (!ccnumValid) {
+      //   $('#cc-num').addClass('invalid')
+      //   event.preventDefault()
+      // } else if (!zipValid) {
+      //   $('#zip').addClass('invalid')
+      //   event.preventDefault()
+      // } else if (!cvvValid) {
+      //   $('#cvv').addClass('invalid')
+      //   event.preventDefault()
+      // }
+      else if (!paymentValid) {
         event.preventDefault()
       } else {
         return false
