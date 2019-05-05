@@ -326,18 +326,16 @@ $(document).ready(function() {
         event.preventDefault()
       } else if (!activitiesValid) {
         event.preventDefault()
-      }
-      // else if (!ccnumValid) {
-      //   $('#cc-num').addClass('invalid')
-      //   event.preventDefault()
-      // } else if (!zipValid) {
-      //   $('#zip').addClass('invalid')
-      //   event.preventDefault()
-      // } else if (!cvvValid) {
-      //   $('#cvv').addClass('invalid')
-      //   event.preventDefault()
-      // }
-      else if (!paymentValid) {
+      } else if (!ccnumValid) {
+        $('#cc-num').addClass('invalid')
+        event.preventDefault()
+      } else if (!zipValid) {
+        $('#zip').addClass('invalid')
+        event.preventDefault()
+      } else if (!cvvValid) {
+        $('#cvv').addClass('invalid')
+        event.preventDefault()
+      } else if (!paymentValid) {
         event.preventDefault()
       } else {
         return false
