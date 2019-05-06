@@ -33,6 +33,7 @@ $(document).ready(function() {
     const otherOption = $(this).val()
     if (otherOption === 'other') {
       $('#other-title').show().prop('disabled', false)
+      //validation on 'other' field only if selected
       $('#other-title').on('input', function() {
         let input = $(this)
         let inputOther = input.val()
@@ -325,8 +326,6 @@ $(document).ready(function() {
 
   // before form is submitted check required fields are valid
   $('form').submit(function(e) {
-
-
     $(':input:not(#other-title, #title, #payment, button)').each(function() {
       let $input = $(this)
       if ($input.val() == '') {
