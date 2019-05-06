@@ -8,6 +8,7 @@ $(document).ready(function() {
 
   // booleans for validations on submit
   let nameValid = false
+  let otherValid = true
   let mailValid = false
   let activitiesValid = false
   let ccnumValid = false
@@ -32,8 +33,24 @@ $(document).ready(function() {
     const otherOption = $(this).val()
     if (otherOption === 'other') {
       $('#other-title').show().prop('disabled', false)
+      $('#other-title').on('input', function() {
+        let input = $(this)
+        let inputOther = input.val()
+        let otherValidation = /^[a-zA-Z ,.'-]+$/.test($('#other-title').val())
+        if (inputOther.length < 1) {
+          input.removeClass('valid').addClass('invalid')
+          otherValid = false
+        } else if (!otherValidation) {
+          input.removeClass('valid').addClass('invalid')
+          nameValid = false
+        } else {
+          input.removeClass('invalid').addClass('valid')
+          otherValid = true
+        }
+      })
     } else {
       $('#other-title').hide().prop('disabled', true)
+      otherValid = true
     }
   })
 
@@ -320,6 +337,9 @@ $(document).ready(function() {
         activitiesValid = false
       } else if (!nameValid) {
         $('#name').addClass('invalid')
+        event.preventDefault()
+      } else if (!otherValid) {
+        $('#other-title').addClass('invalid')
         event.preventDefault()
       } else if (!mailValid) {
         $('#mail').addClass('invalid')
