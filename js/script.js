@@ -251,7 +251,7 @@ $(document).ready(function() {
   $('#mail').on('input', function() {
     let input = $(this)
     let inputMail = input.val()
-    let mailValidation = /^[^@]+@[^@.]+\.[a-z]{3}$/i.test(inputMail)
+    let mailValidation = /^[^@]+@[^@.]+\.[a-z]{2,4}$/i.test(inputMail)
     if (!mailValidation) {
       input.removeClass('valid').addClass('invalid')
       $('label[for="mail"]').text(invalidAlerts.mail).css('color', 'red')
@@ -334,6 +334,7 @@ $(document).ready(function() {
       } else if ($('input:checkbox').filter(':checked').length < 1) {
         $('.activities legend').text(invalidAlerts.activity).css('color', 'red')
         activitiesValid = false
+        event.preventDefault()
       } else if (!nameValid) {
         $('#name').addClass('invalid')
         event.preventDefault()
@@ -344,6 +345,7 @@ $(document).ready(function() {
         $('#mail').addClass('invalid')
         event.preventDefault()
       } else if (!activitiesValid) {
+        $('.activities').addClass('invalid')
         event.preventDefault()
       } else if (!ccnumValid) {
         $('#cc-num').addClass('invalid')
