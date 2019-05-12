@@ -34,6 +34,8 @@ $(document).ready(function() {
     if (otherOption === 'other') {
       $('#other-title').show().prop('disabled', false)
       //validation on 'other' field only if selected
+      $('#other-title').addClass('invalid')
+      otherValid = false
       $('#other-title').on('input', function() {
         let input = $(this)
         let inputOther = input.val()
@@ -43,7 +45,7 @@ $(document).ready(function() {
           otherValid = false
         } else if (!otherValidation) {
           input.removeClass('valid').addClass('invalid')
-          nameValid = false
+          otherValid = false
         } else {
           input.removeClass('invalid').addClass('valid')
           otherValid = true
@@ -51,6 +53,7 @@ $(document).ready(function() {
       })
     } else {
       $('#other-title').hide().prop('disabled', true)
+      $('#other-title').removeClass('invalid').val('')
       otherValid = true
     }
   })
